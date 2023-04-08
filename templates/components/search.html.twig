@@ -1,0 +1,21 @@
+<div {{ attributes }}>
+  <div class="d-flex justify-content-center">
+    <form class="form-inline">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="searchInput" class="sr-only">Search</label>
+        <input type="text" class="form-control" data-model="debounce(500)|keywords" value="{{ keywords }}" placeholder="Search..." />
+      </div>
+    </form>
+  </div>
+  <div>
+    <ul class="list-group">
+      {% for item in this.song.response.docs %}
+        <li class="list-group-item">
+          {{ item.name }}
+        </li>
+      {% else %}
+        Không tìm thấy bài hát.
+      {% endfor %}
+    </ul>
+  </div>
+</div>
