@@ -8,11 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-    #[Route('/', name: 'app_search')]
+    #[Route('/', name: 'song_search')]
     public function index(): Response
     {
-        return $this->render('search/index.html.twig', [
-            'controller_name' => 'SearchController',
-        ]);
+        return $this->render('search/index.html.twig');
     }
 }

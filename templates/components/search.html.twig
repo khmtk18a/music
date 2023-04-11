@@ -1,21 +1,45 @@
-<div {{ attributes }}>
-  <div class="d-flex justify-content-center">
-    <form class="form-inline">
-      <div class="form-group mx-sm-3 mb-2">
-        <label for="searchInput" class="sr-only">Search</label>
-        <input type="text" class="form-control" data-model="debounce(500)|keywords" value="{{ keywords }}" placeholder="Search..." />
-      </div>
-    </form>
+<div {{ attributes }} class="panel-group">
+  <div class="panel panel-primary">
+    <div class="panel-heading">Tìm kiếm bài hát</div>
+    <div class="panel-body">
+      <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="searchInput" class="sr-only">Search</label>
+          <input type="text" class="form-control" data-model="debounce(500)|keywords" value="{{ keywords }}" placeholder="Search..." />
+        </div>
+      </form>
+      <span data-loading="action(detail)|show">Đang tìm...</span>
+    </div>
   </div>
-  <div>
-    <ul class="list-group">
-      {% for item in this.song.response.docs %}
-        <li class="list-group-item">
-          {{ item.name }}
-        </li>
-      {% else %}
-        Không tìm thấy bài hát.
-      {% endfor %}
-    </ul>
+  {% if trackList %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">Thông tin bài hát</div>
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left">
+            <img src="{{ trackList.track.coverimage|trim }}" class="media-object" style="width:60px" />
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{ trackList.track.title|trim }}</h4>
+            <p>{{ trackList.track.creator|trim }}</p>
+            <a href="{{ trackList.track.location|trim }}" class="btn btn-success" role="button">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <div class="panel panel-primary">
+    <div class="panel-heading">Kết quả tìm kiếm</div>
+    <div class="panel-body">
+      <ul class="list-group">
+        {% for item in this.song.response.docs %}
+          <li class="list-group-item">
+            <a data-action="live#action" data-action-name="detail(url={{ item.url }})" href="#song-detail">{{ item.name }} - {{ item.artist }}</a>
+          </li>
+        {% else %}
+          Không tìm thấy bài hát.
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </div>
