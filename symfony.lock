@@ -1,16 +1,4 @@
 {
-    "nelmio/solarium-bundle": {
-        "version": "5.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "2.4",
-            "ref": "dd8a4574b91d26fb70f10efe395c6d4e655bdf71"
-        },
-        "files": [
-            "config/packages/nelmio_solarium.yaml"
-        ]
-    },
     "symfony/console": {
         "version": "6.2",
         "recipe": {

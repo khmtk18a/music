@@ -1,0 +1,9 @@
+# config/packages/schranz_search.yaml
+
+schranz_search:
+    schemas:
+        default:
+            dir: '%kernel.project_dir%/config/schemas'
+    engines:
+        default:
+            adapter: 'solr://159.223.53.171:8983'

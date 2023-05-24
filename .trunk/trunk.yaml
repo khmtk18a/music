@@ -1,0 +1,46 @@
+version: 0.1
+cli:
+  version: 1.9.1
+lint:
+  definitions:
+    - name: psalm
+      files:
+        - php
+      commands:
+        - output: sarif
+          success_codes: [0, 2]
+          run: ${workspace}/vendor/bin/psalm --output-format=sarif --no-progress ${target}
+          read_output_from: stdout
+          run_linter_from: workspace
+          disable_upstream: true
+    - name: phpstan
+      files:
+        - php
+      commands:
+        - output: regex
+          parse_regex: ((?P<path>.*):(?P<line>\d+):(?P<message>.*))
+          success_codes: [0, 1]
+          run: ${workspace}/vendor/bin/phpstan analyse --level=6 --error-format=raw --no-progress ${target}
+          read_output_from: stdout
+          run_linter_from: workspace
+          disable_upstream: true
+  files:
+    - name: php
+      extensions:
+        - php
+      shebangs:
+        - php
+  enabled:
+    - psalm
+actions:
+  disabled:
+    - trunk-announce
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+  enabled:
+    - trunk-upgrade-available
+plugins:
+  sources:
+    - id: trunk
+      ref: v0.0.17
+      uri: https://github.com/trunk-io/plugins

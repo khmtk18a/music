@@ -2,9 +2,9 @@
 
 namespace App\Components;
 
-use Solarium\Client;
-use Solarium\QueryType\Select\Query\Query;
-use Solarium\QueryType\Select\Result\Result;
+use Schranz\Search\SEAL\EngineInterface;
+use Schranz\Search\SEAL\Search\Condition\SearchCondition;
+use Schranz\Search\SEAL\Search\Result;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -17,7 +17,7 @@ class SearchComponent
 {
     use DefaultActionTrait;
 
-    public function __construct(private Client $client, private HttpClientInterface $httpClient)
+    public function __construct(private EngineInterface $engine, private HttpClientInterface $httpClient)
     {
     }
 
@@ -29,23 +29,18 @@ class SearchComponent
 
     /**
      * Song search.
-     *
-     * @return array<array-key,mixed>
      */
-    public function getSong(): array
+    public function getSong(): Result
     {
-        /** @var Query */
-        $select = $this->client->createSelect();
-        $select->setRows(20);
+        $searcher = $this->engine->createSearchBuilder()
+            ->addIndex('song')
+            ->limit(10);
 
         if ('' !== $this->keywords) {
-            $select->setQuery(sprintf('name:"%s"', $this->keywords));
+            $searcher = $searcher->addFilter(new SearchCondition($this->keywords));
         }
 
-        /** @var Result */
-        $resultSet = $this->client->execute($select);
-
-        return $resultSet->getData();
+        return $searcher->getResult();
     }
 
     /**
